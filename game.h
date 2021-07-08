@@ -1,17 +1,20 @@
-#include "playerone.h"
-#include "playertwo.h"
+#include "player.h"
 
 #ifndef GAME_H
 #define GAME_H
+enum Winner{Empty, Player1, Player2, Draw};
 
 class Game // Класс Игра с полями Основное Игровое Поле и двумя игроками.
 {
     private:
         std::shared_ptr<Field> m_mainField = nullptr;
-        PlayerOne *m_playerone = nullptr;
-        PlayerTwo *m_playertwo = nullptr;
+        Player m_playerone;
+        Player m_playertwo;
+        Winner winner = Empty;
     public:
         Game() = default;
+
+        Winner getWinner(){return winner;}
 
         std::ostream & getWinner(std::ostream &os); // Присвоение статуса игрокам в конце игры и вывод информации на экран.
              
