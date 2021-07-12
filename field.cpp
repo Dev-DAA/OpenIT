@@ -1,53 +1,91 @@
-#include <iostream>
 #include "field.h"
+
+#include <iostream>
 
 Field::Field()
 {
-    for(unsigned int i = 0; i < m_size; ++i)
+    for (uint8_t i = 0; i < m_length * m_height; ++i)
     {
-        unsigned int cellValue = rand() % 11 + 1;
-        unsigned int cellSign = rand() % 2;
-        cellSign == 1 ? m_playground[i] = cellValue : m_playground[i] = -cellValue;
-        std::cout << i <<" "<< m_playground[i] << "\n";
-    }
-    std::cout << "playground size: " << m_playground.size() << '\n';
-    m_currentPos = m_playground.begin();
-    std::cout << "before placement: " << *m_currentPos << '\n';
-    m_currentPos += FIELD_SIZE*FIELD_SIZE/2 + FIELD_SIZE/2;
-    std::cout <<"after placement: "<< *m_currentPos << '\n';
-}
-
-Field::Field(const Field &obj)
-{
-    std::cout << "a copy constructor was used\n";
-    m_playground = obj.m_playground;
-    m_currentPos = obj.m_currentPos;
-}
-
-Field & Field::operator=(const Field &obj)
-{
-    m_playground = obj.m_playground;
-    m_currentPos = obj.m_currentPos;
-    return *this;    
-}
-
-/*void Field::InitField() // Инициализируем ячейки поля рандомными значениями m_value от 1 до 11 и m_color Red\Green. Устанавливаем текущую позицию m_curretntPos на середину поля.
-{
-    for(uint8_t i = 0; i < m_size; ++i){
         uint8_t cellValue = rand() % 11 + 1;
-        uint8_t cellSign = rand() % 2;
+        uint8_t cellSign  = rand() % 2;
         cellSign == 1 ? m_playground[i] = cellValue : m_playground[i] = -cellValue;
     }
-        m_currentPos = m_playground.begin() + FIELD_SIZE*FIELD_SIZE/2 + FIELD_SIZE/2; 
-}*/
-
-citerator Field::GetInitialPosition()const // Возвращаем итератор на начало игрового поля.
-{
-    return m_playground.cbegin();
+    m_coordinates.x = m_length / 2;
+    m_coordinates.y = m_height / 2;
 }
 
-std::ptrdiff_t Field::GetPosition() // Считаем разницу между текущим положением на поле и его началом. Ипользуется в методе Move() для расчёта границ линии\колонны.
+void Field::InitField() // Инициализируем ячейки поля рандомными значениями от +/-1 до +/-11.
+                        // Устанавливаем текущие координаты на середину поля.
 {
-    std::ptrdiff_t result = m_currentPos - GetInitialPosition();
-    return result;
+    for (uint8_t i = 0; i < m_length * m_height; ++i)
+    {
+        uint8_t cellValue = rand() % 11 + 1;
+        uint8_t cellSign  = rand() % 2;
+        cellSign == 1 ? m_playground[i] = cellValue : m_playground[i] = -cellValue;
+    }
+    m_coordinates.x = m_length / 2;
+    m_coordinates.y = m_height / 2;
+}
+
+thearray Field::GetField() // Возвращаем копию игрового поля для новой игры и внесения изменений в ячейки.
+{
+    return m_playground;
+}
+
+Field::Сoordinates Field::GetPos() // Возвращаем текущее положение курсора.
+{
+    return m_coordinates;
+}
+
+bool Field::IsLineEmpty(Check line) const // Проверяем строку/столбец на наличие неоткрытых ячеек.
+{
+    if (line == Check::HORIZONTAL)
+    {
+        for (uint8_t i = 0; i < m_length; ++i)
+        {
+            if (!(m_playground[m_coordinates.y * m_length + i] == 0)) return false;
+        }
+        return true;
+    }
+    else
+    {
+        for (uint8_t j = 0; j < m_height; ++j)
+        {
+            if (!(m_playground[j * m_length + m_coordinates.x] == 0)) return false;
+        }
+        return true;
+    }
+}
+
+void Field::Move(Who who, Direction direction)
+{
+    if (who == Who::PLAYER1)
+    {
+        if (direction == Direction::LEFT && m_coordinates.x > 0)
+        {
+            m_coordinates.x -= 1;
+        }
+        if (direction == Direction::RIGHT && m_coordinates.x < m_length)
+        {
+            m_coordinates.x += 1;
+        }
+    }
+    else
+    {
+        if (direction == Direction::UP && m_coordinates.y > 0)
+        {
+            m_coordinates.y -= 1;
+        }
+        if (direction == Direction::DOWN && m_coordinates.y < m_height)
+        {
+            m_coordinates.y += 1;
+        }
+    }
+}
+
+int8_t Field::Open()
+{
+    int8_t value = m_playground[m_length * m_coordinates.y + m_coordinates.x];
+    m_playground[m_length * m_coordinates.y + m_coordinates.x] = 0;
+    return value;
 }

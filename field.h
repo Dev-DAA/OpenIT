@@ -1,32 +1,63 @@
-#include <memory>
 #include <array>
+#include <memory>
+
 #ifndef FIELD_H
-#define FIELD_H
+#    define FIELD_H
 
-#define FIELD_SIZE 2
-typedef std::array<int,FIELD_SIZE*FIELD_SIZE>::iterator iterator;
-typedef std::array<int,FIELD_SIZE*FIELD_SIZE>::const_iterator citerator;
+#    define FIELD_LENGTH 8
+#    define FIELD_HEIGHT 8
 
-class Field // Класс Поле, состоящий из FIELD_SIZE * FIELD_SIZE ячеек.
+typedef std::array<int8_t, FIELD_LENGTH * FIELD_HEIGHT> thearray;
+
+enum class Direction
 {
-    private:
-        const uint8_t m_size = FIELD_SIZE*FIELD_SIZE;
-        std::array<int, FIELD_SIZE*FIELD_SIZE> m_playground;
-    public:
-        iterator m_currentPos;
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+};
+enum class Check
+{
+    HORIZONTAL,
+    VERTICAL
+};
+enum class Who
+{
+    PLAYER1,
+    PLAYER2
+};
 
-    public:
-        Field();
-        Field(const Field &);
-        Field& operator=(const Field &obj);
+class Field // Класс Поле, состоящий из FIELD_LENGTH * FIELD_HEIGHT ячеек.
+{
+  private:
+    const uint8_t m_length = FIELD_LENGTH;
+    const uint8_t m_height = FIELD_HEIGHT;
+    thearray      m_playground;
 
-        void InitField(); // Инициализируем ячейки поля рандомными значениями m_value от 1 до 11 и m_color Red\Green. Устанавливаем текущую позицию m_curretntPos на середину поля.
+  public:
+    struct Сoordinates
+    {
+        uint8_t x = 0;
+        uint8_t y = 0;
+    } m_coordinates;
 
-        citerator GetInitialPosition()const; // Возвращаем указатель на начало игрового поля.
+    Field();
+    ~Field()
+    {
+    }
 
-        std::ptrdiff_t GetPosition(); // Считаем разницу между текущим положением на поле и его началом. Ипользуется в методе Move() для расчёта границ линии\колонны.
+    void InitField(); // Инициализируем ячейки поля рандомными значениями m_value от -/+1 до -/+11.
+                      // Устанавливаем текущую позицию на середину поля.
 
-        ~Field(){}
+    thearray GetField(); // Возвращаем копию игрового поля для новой игры и внесения изменений в ячейки.
+
+    Сoordinates GetPos(); // Возвращаем координаты ячейки для её открытия или проверки на статус "открыта".
+
+    bool IsLineEmpty(Check line) const; // Проверяем строку\столбец на наличие неоткрытых ячеек.
+
+    void Move(Who who, Direction direction); // Смещение курсора в указанном направлении.
+
+    int8_t Open();
 };
 
 #endif
