@@ -5,26 +5,22 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+enum class MoveCursor{HORIZONTALLY, VERTICALLY}; // Разрешённое направление движения курсора.
+
 class Player 
 {
     private:
-        int16_t m_score;
-        std::shared_ptr<Field> m_gameField = nullptr;
+        int16_t m_score = 0;
+        MoveCursor m_cursor;
     public:
-        Player() = default; 
-        Player(std::shared_ptr<Field>field);
-        Player(Player &&obj);
-        Player &operator=(Player &&obj);
-
-        //void SetPlayerToField(std::shared_ptr<Field> field); // Предоставляем игроку доступ к полю field; Доступ будут иметь оба игрока через std::shared_ptr;
-
-        iterator GetCurrentPos() const; // Возвращаем указатель на текущую позицию. Используется для открытия ячейки в классе Game.
-
-        bool IsLineEmpty(bool who) const;
-        void AddScore(int8_t nscore);
-        int16_t GetScore() const;
-        void Move(bool who, char ch);
+        Player(); 
         ~Player(){};
+
+        int16_t GetScore() const; // Получаем текущий счёт игрока.
+
+        void AddScore(int16_t nscore); // Увеличение счёта игрока на nscore очков.
+
+        MoveCursor GrantedDirection(Who who) const; // Получаем разрешённое направление движения курсора.
 };
 
 #endif

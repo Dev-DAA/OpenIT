@@ -18,8 +18,8 @@ enum class Direction
 };
 enum class Check
 {
-    HORIZONTAL,
-    VERTICAL
+    LINE,
+    COLUMN
 };
 enum class Who
 {
