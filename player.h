@@ -1,11 +1,10 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include <memory>
 #include <utility>
 
 #include "field.h"
-
-
-#ifndef PLAYER_H
-#    define PLAYER_H
 
 enum class MoveCursor
 {
@@ -20,14 +19,14 @@ class Player
     MoveCursor m_cursor;
 
   public:
-    Player();
+    Player(MoveCursor mcursor);
     ~Player() = default;
 
     int16_t GetScore() const; // Получаем текущий счёт игрока.
 
     void AddScore(int16_t nscore); // Увеличение счёта игрока на nscore очков.
 
-    MoveCursor GrantedDirection(Who who) const; // Получаем разрешённое направление движения курсора.
+    MoveCursor GrantedDirection() const; // Получаем разрешённое направление движения курсора.
 };
 
 #endif

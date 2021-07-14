@@ -16,7 +16,7 @@ void Player::AddScore(int16_t nscore)
     m_score += nscore;
 }
 
-MoveCursor Player::GrantedDirection(Who who) const
+MoveCursor Player::GrantedDirection() const
 {
-    who == Who::PLAYER1 ? return HORIZONTALLY : return VERTICALLY;
+    return m_cursor;
 }
