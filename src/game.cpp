@@ -1,11 +1,11 @@
 #include "game.h"
 #include <iostream>
 
-Game::Game()
+/*Game::Game()
 {
     m_mainField = std::make_shared<Field>(Field());
-    m_playerone = Player(m_mainField);
-    m_playertwo = Player(m_mainField);
+    m_playerone;
+    m_playertwo;
     winner = Empty;
 }
 
@@ -30,14 +30,14 @@ Winner Game::getWinner() const
     return winner;
 }
 
-/*void Game::startGame() // Инициалиция поля, предоставление доступа к нему игрокам и установка статуса обоих в Empty.
+void Game::startGame() // Инициалиция поля, предоставление доступа к нему игрокам и установка статуса обоих в Empty.
 {
     m_mainField = std::shared_ptr<Field>();
     m_mainField->InitField();
     m_playerone.SetPlayerToField(m_mainField);
     m_playertwo.SetPlayerToField(m_mainField);
 
-}*/
+}
 
 void Game::playGame() // Основная логика игры.
 {
@@ -109,3 +109,4 @@ void Game::playGame() // Основная логика игры.
     }
     getWinner();
 }
+*/

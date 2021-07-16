@@ -1,3 +1,4 @@
+  
 #include <array>
 #include <memory>
 
@@ -21,11 +22,6 @@ enum class Check
     LINE,
     COLUMN
 };
-enum class Who
-{
-    PLAYER1,
-    PLAYER2
-};
 
 class Field // Класс Поле, состоящий из FIELD_LENGTH * FIELD_HEIGHT ячеек.
 {
@@ -33,29 +29,30 @@ class Field // Класс Поле, состоящий из FIELD_LENGTH * FIELD
     const uint8_t m_length = FIELD_LENGTH;
     const uint8_t m_height = FIELD_HEIGHT;
     thearray      m_playground;
-
-  public:
-    struct Сoordinates
+    struct Coordinates
     {
         uint8_t x = 0;
         uint8_t y = 0;
-    } m_coordinates;
+    };
+
+    uint8_t GetIndex(uint8_t x, uint8_t y) const; // Получаем индекс в массиве на основе переданных координат.
+
+  public:
+    Coordinates m_coordinates;
 
     Field();
-    ~Field()
-    {
-    }
+    ~Field() = default;
 
     void InitField(); // Инициализируем ячейки поля рандомными значениями m_value от -/+1 до -/+11.
                       // Устанавливаем текущую позицию на середину поля.
 
     thearray GetField(); // Возвращаем копию игрового поля для новой игры и внесения изменений в ячейки.
 
-    Сoordinates GetPos(); // Возвращаем координаты ячейки для её открытия или проверки на статус "открыта".
+    Coordinates GetPos(); // Возвращаем координаты ячейки для её открытия или проверки на статус "открыта".
 
     bool IsLineEmpty(Check line) const; // Проверяем строку\столбец на наличие неоткрытых ячеек.
 
-    void Move(Who who, Direction direction); // Смещение курсора в указанном направлении.
+    void Move(Direction direction); // Смещение курсора в указанном направлении.
 
     int8_t Open();
 };
