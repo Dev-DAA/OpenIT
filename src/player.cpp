@@ -2,9 +2,7 @@
 
 #include <iostream>
 
-Player::Player(MoveCursor mcursor) : m_cursor(mcursor)
-{
-}
+Player::Player(MoveCursor mcursor): m_cursor(mcursor){}
 
 int16_t Player::GetScore() const
 {

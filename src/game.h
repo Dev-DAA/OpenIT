@@ -2,27 +2,29 @@
 
 #ifndef GAME_H
 #define GAME_H
-enum Winner{Empty, Player1, Player2, Draw};
+enum class Winner{Empty, Player1, Player2, Draw};
 
 class Game // Класс Игра с полями Основное Игровое Поле и двумя игроками.
 {
     private:
-        std::shared_ptr<Field> m_mainField = nullptr;
-        Player m_playerone;
-        Player m_playertwo;
-        Winner winner;
+        Field m_field;
+        Player m_playerone = MoveCursor::HORIZONTALLY;
+        Player m_playertwo = MoveCursor::VERTICALLY;
+        Winner winner = Winner::Empty;
+        // An object of IO class goes here;
+
     public:
-        Game();
+        Game() = default;
+        ~Game() = default;
 
-        Winner getWinner()const;
+        void NewGame(); // Инициализация поля, установка статуса winner в Empty.
+        
+        void playGame(); // Основная логика игры. 
 
-        void setWinner(); // Присвоение статуса игрокам в конце игры и вывод информации на экран.
-             
-        void startGame(); // Инициалиция поля, предоставление доступа к нему игрокам и установка статуса обоих в Empty.
+        Winner getWinner()const; // Вывод информации о победителе на экран.
 
-        void playGame(); // Основная логика игры.
- 
-    ~Game(){}
+        void setWinner(); // Присвоение статуса в конце игры.
+
 };
 
 #endif

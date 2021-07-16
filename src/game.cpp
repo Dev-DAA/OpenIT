@@ -1,57 +1,44 @@
 #include "game.h"
 #include <iostream>
 
-/*Game::Game()
-{
-    m_mainField = std::make_shared<Field>(Field());
-    m_playerone;
-    m_playertwo;
-    winner = Empty;
-}
-
 void Game::setWinner() // Присвоение статуса игрокам в конце игры и вывод информации на экран.
 {
     if (m_playerone.GetScore() > m_playertwo.GetScore())
     {
-        winner = Player1;
+        winner = Winner::Player1;
     }
     else if (m_playerone.GetScore() < m_playertwo.GetScore())
     {
-        winner = Player2;
+        winner = Winner::Player2;
     }
     else
     {
-        winner = Draw;
+        winner = Winner::Draw;
     }
 }
 Winner Game::getWinner() const
 {
-    std::cout << "And the winner is: " << winner << '\n';
+    std::cout << "And the winner is: " << static_cast<int>(winner) << '\n';
     return winner;
 }
 
-void Game::startGame() // Инициалиция поля, предоставление доступа к нему игрокам и установка статуса обоих в Empty.
+void Game::NewGame() // Инициализация поля, установка статуса winner в Empty.
 {
-    m_mainField = std::shared_ptr<Field>();
-    m_mainField->InitField();
-    m_playerone.SetPlayerToField(m_mainField);
-    m_playertwo.SetPlayerToField(m_mainField);
-
+    m_field.InitField();
+    winner = Winner::Empty;
 }
 
 void Game::playGame() // Основная логика игры.
 {
-    //startGame();
     bool flag = 0; // Значение flag определяет кто сейчас ходит.
-    iterator currentPos;
     char ch;
     int16_t nscore = 0;
-    while (winner == Empty)
+    while (winner == Winner::Empty)
     {
         if (flag == 0)
         {
             std::cout << "The 1st player's turn!\n";
-            if (!m_playerone.IsLineEmpty(0)) // Проверка на неоткрытые ячейки.
+            if (!m_field.IsLineEmpty(Check::LINE)) // Проверка на неоткрытые ячейки.
             {
                 while (std::cin >> ch && flag == 0)
                 {
@@ -109,4 +96,3 @@ void Game::playGame() // Основная логика игры.
     }
     getWinner();
 }
-*/

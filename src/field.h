@@ -1,12 +1,11 @@
-  
+#ifndef FIELD_H
+#define FIELD_H
+
 #include <array>
 #include <memory>
 
-#ifndef FIELD_H
-#    define FIELD_H
-
-#    define FIELD_LENGTH 8
-#    define FIELD_HEIGHT 8
+#define FIELD_LENGTH 8
+#define FIELD_HEIGHT 8
 
 typedef std::array<int8_t, FIELD_LENGTH * FIELD_HEIGHT> thearray;
 
