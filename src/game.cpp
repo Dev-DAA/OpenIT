@@ -33,6 +33,7 @@ void Game::playGame() // Основная логика игры.
     bool flag = 0; // Значение flag определяет кто сейчас ходит.
     char ch;
     int16_t nscore = 0;
+    Direction dir;
     while (winner == Winner::Empty)
     {
         if (flag == 0)
@@ -42,18 +43,14 @@ void Game::playGame() // Основная логика игры.
             {
                 while (std::cin >> ch && flag == 0)
                 {
-                    if (ch == 'a' || ch == 'd') // Если в ch 'a' или 'd' - движемся в соответсвующих направлениях.
-                    {
-                        m_playerone.Move(0,ch);
-                    }
+                    ch == 'a' ? dir = Direction::LEFT : ch == 'd' ? dir = Direction::RIGHT  : dir = Direction::STAY;
+                    m_field.Move(dir);
                     if (ch == 'o') // Если 'o', то проверяем ячейку на статус "открыта", открываем, считываем значение, добавляем в счёт игрока. Помечаем ячейку как "открыта".
                     {
-                        currentPos = m_playerone.GetCurrentPos();
-                        if (!*currentPos)
+                        uint8_t index = m_field.GetIndex(m_field.GetPosX(),m_field.GetPosY());
+                        if (m_field.GetField()[index] != 0)
                         {
-                            nscore = *currentPos;
-                            m_playerone.AddScore(nscore);
-                            *currentPos = 0;
+                            m_playerone.AddScore(m_field.Open());
                             flag = 1; // Если открыли ячейку и получили значение, то ход переходит ко второму игроку.
                         }
                     }
@@ -67,22 +64,18 @@ void Game::playGame() // Основная логика игры.
         else // То же самое для второго игрока с ходом по вертикали.
         {
             std::cout << "The 2nd player's turn!\n";
-            if (!m_playertwo.IsLineEmpty(1))
+            if (!m_field.IsLineEmpty(Check::COLUMN))
             {
                 while (std::cin >> ch && flag == 1)
                 {
-                    if (ch == 'w' || ch == 's')
-                    {
-                        m_playertwo.Move(1,ch);
-                    }
+                    ch == 'w' ? dir = Direction::UP : ch == 's' ? dir = Direction::DOWN  : dir = Direction::STAY;
+                    m_field.Move(dir);
                     if (ch == 'o')
                     {
-                        currentPos = m_playertwo.GetCurrentPos();
-                        if (!*currentPos)
+                        uint8_t index = m_field.GetIndex(m_field.GetPosX(),m_field.GetPosY());
+                        if (m_field.GetField()[index] != 0)
                         {
-                            nscore = *currentPos;
-                            m_playertwo.AddScore(nscore);
-                            *currentPos = 0;
+                            m_playertwo.AddScore(m_field.Open());
                             flag = 0;
                         }
                     }

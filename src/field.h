@@ -14,7 +14,8 @@ enum class Direction
     UP,
     DOWN,
     LEFT,
-    RIGHT
+    RIGHT,
+    STAY
 };
 enum class Check
 {
@@ -34,7 +35,6 @@ class Field // Класс Поле, состоящий из FIELD_LENGTH * FIELD
         uint8_t y = 0;
     };
 
-    uint8_t GetIndex(uint8_t x, uint8_t y) const; // Получаем индекс в массиве на основе переданных координат.
 
   public:
     Coordinates m_coordinates;
@@ -42,18 +42,21 @@ class Field // Класс Поле, состоящий из FIELD_LENGTH * FIELD
     Field();
     ~Field() = default;
 
+    uint8_t GetIndex(uint8_t x, uint8_t y) const; // Получаем индекс в массиве на основе переданных координат.
+
     void InitField(); // Инициализируем ячейки поля рандомными значениями m_value от -/+1 до -/+11.
                       // Устанавливаем текущую позицию на середину поля.
 
     thearray GetField(); // Возвращаем копию игрового поля для новой игры и внесения изменений в ячейки.
 
-    Coordinates GetPos(); // Возвращаем координаты ячейки для её открытия или проверки на статус "открыта".
+    uint8_t GetPosX()const; // Возвращаем координату х.
+    uint8_t GetPosY()const; // Возвращаем координату у.
 
     bool IsLineEmpty(Check line) const; // Проверяем строку\столбец на наличие неоткрытых ячеек.
 
     void Move(Direction direction); // Смещение курсора в указанном направлении.
 
-    int8_t Open();
+    int16_t Open();
 };
 
 #endif
