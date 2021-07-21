@@ -6,6 +6,7 @@ set (SOURCE
     game.h
     player.cpp
     player.h
+    common.h
 )
 
 add_executable(main ${SOURCE})

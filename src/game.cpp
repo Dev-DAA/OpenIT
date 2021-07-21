@@ -1,91 +1,73 @@
 #include "game.h"
+
 #include <iostream>
 
-void Game::setWinner() // Присвоение статуса игрокам в конце игры и вывод информации на экран.
+void Game::SetWinner() // Присвоение статуса игрокам в конце игры и вывод информации на экран.
 {
-    if (m_playerone.GetScore() > m_playertwo.GetScore())
+    if (m_players[0].GetScore() > m_players[1].GetScore())
     {
-        winner = Winner::Player1;
+        winner = OpenIt::Winner::Player1;
     }
-    else if (m_playerone.GetScore() < m_playertwo.GetScore())
+    else if (m_players[0].GetScore() < m_players[1].GetScore())
     {
-        winner = Winner::Player2;
+        winner = OpenIt::Winner::Player2;
     }
     else
     {
-        winner = Winner::Draw;
+        winner = OpenIt::Winner::Draw;
     }
 }
-Winner Game::getWinner() const
+OpenIt::Winner Game::GetWinner() const
 {
-    std::cout << "And the winner is: " << static_cast<int>(winner) << '\n';
+    if (winner == OpenIt::Winner::Player1)
+    {
+        std::cout << "And the winner is: Player 1" << '\n';
+    }
+    else if (winner == OpenIt::Winner::Player2)
+    {
+        std::cout << "And the winner is: Player 2" << '\n';
+    }
+    else
+    {
+        std::cout << "Draw!" << '\n';
+    }
+
     return winner;
 }
 
 void Game::NewGame() // Инициализация поля, установка статуса winner в Empty.
 {
     m_field.InitField();
-    winner = Winner::Empty;
+    winner = OpenIt::Winner::Empty;
 }
 
-void Game::playGame() // Основная логика игры.
+void Game::PlayGame() // Основная логика игры.
 {
-    bool flag = 0; // Значение flag определяет кто сейчас ходит.
-    char ch;
-    int16_t nscore = 0;
-    Direction dir;
-    while (winner == Winner::Empty)
+    char         ch;
+    int16_t      nscore       = 0;
+    unsigned int activePlayer = 0;
+    while (winner == OpenIt::Winner::Empty)
     {
-        if (flag == 0)
+        if (m_field.IsLineEmpty(m_players[activePlayer].GrantedDirection()))
         {
-            std::cout << "The 1st player's turn!\n";
-            if (!m_field.IsLineEmpty(Check::LINE)) // Проверка на неоткрытые ячейки.
+            SetWinner();
+        }
+
+        std::cin >> ch;
+
+        if (ch == 'o')
+        {
+            nscore = m_field.Open();
+            if (nscore)
             {
-                while (std::cin >> ch && flag == 0)
-                {
-                    ch == 'a' ? dir = Direction::LEFT : ch == 'd' ? dir = Direction::RIGHT  : dir = Direction::STAY;
-                    m_field.Move(dir);
-                    if (ch == 'o') // Если 'o', то проверяем ячейку на статус "открыта", открываем, считываем значение, добавляем в счёт игрока. Помечаем ячейку как "открыта".
-                    {
-                        uint8_t index = m_field.GetIndex(m_field.GetPosX(),m_field.GetPosY());
-                        if (m_field.GetField()[index] != 0)
-                        {
-                            m_playerone.AddScore(m_field.Open());
-                            flag = 1; // Если открыли ячейку и получили значение, то ход переходит ко второму игроку.
-                        }
-                    }
-                }
-            }
-            else // Если все ячейки на линии открыты, то выявляем победителя.
-            {
-                setWinner();
+                m_players[activePlayer].AddScore(nscore);
+                activePlayer = (activePlayer + 1) % 2;
             }
         }
-        else // То же самое для второго игрока с ходом по вертикали.
+        else
         {
-            std::cout << "The 2nd player's turn!\n";
-            if (!m_field.IsLineEmpty(Check::COLUMN))
-            {
-                while (std::cin >> ch && flag == 1)
-                {
-                    ch == 'w' ? dir = Direction::UP : ch == 's' ? dir = Direction::DOWN  : dir = Direction::STAY;
-                    m_field.Move(dir);
-                    if (ch == 'o')
-                    {
-                        uint8_t index = m_field.GetIndex(m_field.GetPosX(),m_field.GetPosY());
-                        if (m_field.GetField()[index] != 0)
-                        {
-                            m_playertwo.AddScore(m_field.Open());
-                            flag = 0;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                setWinner();
-            }
+            m_field.Move(m_players[activePlayer].GetDirection(ch));
         }
     }
-    getWinner();
+    GetWinner();
 }

@@ -1,8 +1,9 @@
-#include "game.h"
 #include <iostream>
 
+#include "game.h"
 
-int main(){
+int main()
+{
     std::cout << "Zdravstvuyte!\n";
-return 0;
+    return 0;
 }

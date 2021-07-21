@@ -6,27 +6,23 @@
 
 #include "field.h"
 
-enum class MoveCursor
-{
-    HORIZONTALLY,
-    VERTICALLY
-}; // Разрешённое направление движения курсора.
-
 class Player
 {
   private:
-    int16_t    m_score = 0;
-    MoveCursor m_cursor;
+    int16_t      m_score = 0;
+    OpenIt::Axis m_cursor;
 
   public:
-    Player(MoveCursor mcursor);
+    Player(OpenIt::Axis ncursor);
     ~Player() = default;
 
     int16_t GetScore() const; // Получаем текущий счёт игрока.
 
     void AddScore(int16_t nscore); // Увеличение счёта игрока на nscore очков.
 
-    MoveCursor GrantedDirection() const; // Получаем разрешённое направление движения курсора.
+    OpenIt::Axis GrantedDirection() const; // Получаем разрешённое направление движения.
+
+    OpenIt::Direction GetDirection(char ch) const; // Получаем направление движения в зависимости от нажатой клавиши.
 };
 
 #endif
