@@ -21,7 +21,7 @@ OpenIt::Axis Player::GrantedDirection() const
     return m_cursor;
 }
 
-OpenIt::Direction Player::GetDirection(char ch) const // Получаем направление движения курсора при нажатии клавиши.
+/*OpenIt::Direction Player::GetDirection(char ch) const // Получаем направление движения курсора при нажатии клавиши.
 {
     OpenIt::Direction dir;
     OpenIt::Axis      gdir = GrantedDirection();
@@ -38,4 +38,4 @@ OpenIt::Direction Player::GetDirection(char ch) const // Получаем нап
                     : dir = OpenIt::Direction::STAY;
     }
     return dir;
-}
+}*/
