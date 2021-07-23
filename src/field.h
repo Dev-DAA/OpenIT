@@ -36,11 +36,11 @@ class Field // Класс Поле, состоящий из FIELD_LENGTH * FIELD
 
     thearray GetField(); // Возвращаем копию игрового поля для отрисовки.
 
-    // Coordinates GetCoordinates() const; // Возвращаем координаты курсора в виде структуры.
+    Coordinates GetCoordinates() const; // Возвращаем координаты курсора в виде структуры.
 
     bool IsLineEmpty(OpenIt::Axis line) const; // Проверяем строку\столбец на наличие неоткрытых ячеек.
 
-    void Move(OpenIt::Direction direction); // Смещение курсора в указанном направлении.
+    void Move(OpenIt::Action direction); // Смещение курсора в указанном направлении.
 
     int8_t Open();
 };

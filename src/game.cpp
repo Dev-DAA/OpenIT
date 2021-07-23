@@ -6,24 +6,24 @@ void Game::SetWinner() // Присвоение статуса игрокам в 
 {
     if (m_players[0].GetScore() > m_players[1].GetScore())
     {
-        winner = OpenIt::Winner::Player1;
+        m_winner = OpenIt::Winner::Player1;
     }
     else if (m_players[0].GetScore() < m_players[1].GetScore())
     {
-        winner = OpenIt::Winner::Player2;
+        m_winner = OpenIt::Winner::Player2;
     }
     else
     {
-        winner = OpenIt::Winner::Draw;
+        m_winner = OpenIt::Winner::Draw;
     }
 }
 OpenIt::Winner Game::GetWinner() const
 {
-    if (winner == OpenIt::Winner::Player1)
+    if (m_winner == OpenIt::Winner::Player1)
     {
         std::cout << "And the winner is: Player 1" << '\n';
     }
-    else if (winner == OpenIt::Winner::Player2)
+    else if (m_winner == OpenIt::Winner::Player2)
     {
         std::cout << "And the winner is: Player 2" << '\n';
     }
@@ -32,13 +32,13 @@ OpenIt::Winner Game::GetWinner() const
         std::cout << "Draw!" << '\n';
     }
 
-    return winner;
+    return m_winner;
 }
 
 void Game::NewGame() // Инициализация поля, установка статуса winner в Empty.
 {
     m_field.InitField();
-    winner = OpenIt::Winner::Empty;
+    m_winner = OpenIt::Winner::Empty;
 }
 
 void Game::PlayGame() // Основная логика игры.
@@ -46,7 +46,7 @@ void Game::PlayGame() // Основная логика игры.
     char         ch;               // Используется при обработке ввода с клавиатуры.
     int16_t      nscore       = 0; // Используется при присвоении значения открытой ячейки.
     unsigned int activePlayer = 0; // Индекс текущего игрока.
-    while (winner == OpenIt::Winner::Empty)
+    while (m_winner == OpenIt::Winner::Empty)
     {
         // Проверяем наличие неоткрытых ячеек у активного игрока (по горизонтали\вертикали).
         if (m_field.IsLineEmpty(m_players[activePlayer].GrantedDirection())) 
@@ -69,16 +69,16 @@ void Game::PlayGame() // Основная логика игры.
         {
             // gdir - разрешённое направление движения (HORIZONTAL\VERTICAL).
             OpenIt::Axis gdir = m_players[activePlayer].GrantedDirection();
-            OpenIt::Direction dir;
+            OpenIt::Action dir;
             if(gdir == OpenIt::Axis::HORIZONTAL) 
             {
                 // Если по горизонтали, то обрабатываем клавиши 'a' и 'd'.
-                dir = (ch == 'a' ? OpenIt::Direction::LEFT : ch == 'd' ? OpenIt::Direction::RIGHT : OpenIt::Direction::STAY); 
+                dir = (ch == 'a' ? OpenIt::Action::LEFT : ch == 'd' ? OpenIt::Action::RIGHT : OpenIt::Action::STAY); 
             }
             else
             {
                 // По вертикали - 'w' & 's'.
-                dir = (ch == 'w' ? OpenIt::Direction::UP : ch == 's' ? OpenIt::Direction::DOWN : OpenIt::Direction::STAY);
+                dir = (ch == 'w' ? OpenIt::Action::UP : ch == 's' ? OpenIt::Action::DOWN : OpenIt::Action::STAY);
             }
             m_field.Move(dir);
         }

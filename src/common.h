@@ -2,14 +2,15 @@
 #define COMMON_H
 
 namespace OpenIt
-{
+{   
     // Возможные направления движения игрока.
-    enum class Direction
+    enum class Action
     {
         UP,
         DOWN,
         LEFT,
         RIGHT,
+        OPENCELL,
         STAY
     };
 
