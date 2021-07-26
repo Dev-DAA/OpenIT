@@ -12,6 +12,11 @@ uint8_t Field::GetIndex(uint8_t x, uint8_t y) const // Получаем инде
     return m_length * y + x;
 }
 
+uint8_t Field::GetIndex(const Field::Coordinates &obj)const // Получаем индекс на основе переданной структуры.
+{
+    return m_length * obj.y + obj.x;
+}
+
 void Field::InitField() // Инициализируем ячейки поля рандомными значениями от +/-1 до +/-11.
                         // Устанавливаем текущие координаты на середину поля.
 {
@@ -25,7 +30,7 @@ void Field::InitField() // Инициализируем ячейки поля р
     m_coordinates.y = m_height / 2;
 }
 
-thearray Field::GetField() // Возвращаем копию игрового поля для отрисовки.
+thearray Field::GetField() const // Возвращаем копию игрового поля для отрисовки.
 {
     return m_playground;
 }
