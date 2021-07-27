@@ -1,39 +1,53 @@
 #include "io.h"
 
-static OpenIt::Action GetAction() // Получаем действие для выполнения при нажатии клавиши.
+static OpenIt::Action GetAction(OpenIt::Axis axis) // Получаем действие для выполнения при нажатии клавиши.
 {
     char ch;
     OpenIt::Action dir = OpenIt::Action::STAY;
     while(dir == OpenIt::Action::STAY && std::cin >> ch)
     {
-        switch(ch)
+        if(ch == 'o')
+            dir = OpenIt::Action::OPENCELL;
+        else
         {
-            case 'a' : 
-                dir = OpenIt::Action::LEFT;
-                break;
-            case 'd' :
-                dir = OpenIt::Action::RIGHT;
-                break;
-            case 'w' :
-                dir = OpenIt::Action::UP;
-                break;
-            case 's' :
-                dir = OpenIt::Action::DOWN;
-                break;
-            case 'o' :
-                dir = OpenIt::Action::OPENCELL;
-            default :
-                dir = OpenIt::Action::STAY;
-                break;
-        } 
+            if(axis == OpenIt::Axis::HORIZONTAL)
+            {
+                switch(ch)
+                {
+                    case 'a' : 
+                        dir = OpenIt::Action::LEFT;
+                        break;
+                    case 'd' :
+                        dir = OpenIt::Action::RIGHT;
+                        break;
+                    default: 
+                        dir = OpenIt::Action::STAY;
+                        break;
+                }
+            }
+            else
+            {
+                switch(ch)
+                {
+                    case 'w' :
+                        dir = OpenIt::Action::UP;
+                        break;
+                    case 's' :
+                        dir = OpenIt::Action::DOWN;
+                        break;
+                    default : 
+                        dir = OpenIt::Action::STAY;
+                        break;
+                } 
+            }
+        }
     }
     return dir;
 }
 
-static void DrawField(const Field &obj)
+static void DrawField(const Field &obj, const Player *player)
 {
     fflush(stdout);
-    _setmode(_fileno(stdout),_O_U16TEXT);
     uint8_t index = obj.GetIndex(obj.GetCoordinates());
     uint8_t cmp1 = 0;
     uint8_t cmp2 = 0;
@@ -43,8 +57,11 @@ static void DrawField(const Field &obj)
     const wchar_t tcell[2][7][2] = {{TLT, TH, TH, TH, TH, TH, TRT},{TLB, TH, TH, TH, TH, TH, TRB}};
     thearray::const_iterator cit = tempArr.cbegin();
     thearray::const_iterator cend = tempArr.cend();
+    std::cout << std::string(100,'\n'); // Супер джуниор метод отчистки консоли.
+    _setmode(_fileno(stdout),_O_U16TEXT);
     while(cit != cend)
     {
+        std::wcout << "Player 1: " << player[0].GetScore() << "          " << "Player 2: " << player[1].GetScore() << '\n';
         for(uint8_t i = 0; i < FIELD_LENGTH; ++i)
         {
             if(cmp1 != index)

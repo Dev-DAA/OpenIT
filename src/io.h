@@ -6,7 +6,7 @@
 #include <io.h>    // _setmode, _fileno
 #include <string>
 
-#include "field.h"
+#include "player.h"
 #include "common.h"
 
 #define LT  L"\x250C" // Left-Top corner
@@ -27,9 +27,9 @@ class IO
 {
     public:
         IO() = default;
-        static OpenIt::Action GetAction(); // Получаем действие для выполнения при нажатии клавиши.
+        static OpenIt::Action GetAction(OpenIt::Axis axis); // Получаем действие для выполнения при нажатии клавиши.
         
-        static void DrawField(const Field &);     // Отрисовываем игровое поле. 
+        static void DrawField(const thearray &, const Player *);     // Отрисовываем игровое поле. 
 
     ~IO() = default;
 };

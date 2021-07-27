@@ -43,20 +43,22 @@ void Game::NewGame() // Инициализация поля, установка 
 
 void Game::PlayGame() // Основная логика игры.
 {
-    char         ch;               // Используется при обработке ввода с клавиатуры.
+    OpenIt::Action action = OpenIt::Action::STAY;
     int16_t      nscore       = 0; // Используется при присвоении значения открытой ячейки.
     unsigned int activePlayer = 0; // Индекс текущего игрока.
     while (m_winner == OpenIt::Winner::Empty)
     {
-        // Проверяем наличие неоткрытых ячеек у активного игрока (по горизонтали\вертикали).
-        if (m_field.IsLineEmpty(m_players[activePlayer].GrantedDirection())) 
+        OpenIt::Axis grantedDirection = m_players[activePlayer].GrantedDirection(); // Получаем разрешённое направление движения.
+        
+        if (m_field.IsLineEmpty(grantedDirection)) // Проверяем наличие неоткрытых ячеек у активного игрока (по горизонтали\вертикали).
         {
             break; // Если все ячейки в строке\столбце открыты - выходим из цикла и объявляем победителя.
         }
+        m_io.DrawField(m_field.GetField(),m_players); // Отрисовываем поле в начале игры.
 
-        std::cin >> ch;
+        action  = m_io.GetAction(grantedDirection); // Если в строке\столбце есть свободные ячейки, то двигаемся в направлении action.
 
-        if (ch == 'o')
+        if (action == OpenIt::Action::OPENCELL)
         {
             nscore = m_field.Open(); // Открываем ячейку, присваивая её содержимое переменной nscore.
             if (nscore)
@@ -67,21 +69,9 @@ void Game::PlayGame() // Основная логика игры.
         }
         else
         {
-            // gdir - разрешённое направление движения (HORIZONTAL\VERTICAL).
-            OpenIt::Axis gdir = m_players[activePlayer].GrantedDirection();
-            OpenIt::Action dir;
-            if(gdir == OpenIt::Axis::HORIZONTAL) 
-            {
-                // Если по горизонтали, то обрабатываем клавиши 'a' и 'd'.
-                dir = (ch == 'a' ? OpenIt::Action::LEFT : ch == 'd' ? OpenIt::Action::RIGHT : OpenIt::Action::STAY); 
-            }
-            else
-            {
-                // По вертикали - 'w' & 's'.
-                dir = (ch == 'w' ? OpenIt::Action::UP : ch == 's' ? OpenIt::Action::DOWN : OpenIt::Action::STAY);
-            }
-            m_field.Move(dir);
+            m_field.Move(action);
         }
+        m_io.DrawField(m_field.GetField(),m_players);
     }
     SetWinner(); // Устанавливаем победителя.
     GetWinner(); // Выводим информацию о победителе на экран.
