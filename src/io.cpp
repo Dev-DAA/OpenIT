@@ -4,31 +4,28 @@ OpenIt::Action IO::GetAction() // Получаем действие для вы�
 {
     char ch;
     OpenIt::Action dir = OpenIt::Action::STAY;
-    while(dir == OpenIt::Action::STAY && std::cin >> ch)
+    while(true)
     {
+        std::cin >> ch;
         switch(ch)
         {
             case 'a' :
                 dir = OpenIt::Action::LEFT;
-                break;
+                return dir;
             case 'd' :
                 dir = OpenIt::Action::RIGHT;
-                break;
+                return dir;
             case 'w' :
                 dir = OpenIt::Action::UP;
-                break;
+                return dir;
             case 's' :
                 dir = OpenIt::Action::DOWN;
-                break;
+                return dir;
             case 'o' :
                 dir = OpenIt::Action::OPENCELL;
-                break;
-            default :
-                dir = OpenIt::Action::STAY;
-                break;        
+                return dir;    
         }
     }
-    return dir;
 }
 
 void IO::Render(const Field &obj, const Player *player)

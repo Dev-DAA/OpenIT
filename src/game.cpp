@@ -49,12 +49,13 @@ void Game::PlayGame() // Основная логика игры.
     while (m_winner == OpenIt::Winner::Empty)
     {
         OpenIt::Axis grantedDirection = m_players[activePlayer].GrantedDirection(); // Получаем разрешённое направление движения.
+
+        IO::Render(m_field,m_players); // Отрисовываем поле в начале игры.
         
         if (m_field.IsLineEmpty(grantedDirection)) // Проверяем наличие неоткрытых ячеек у активного игрока (по горизонтали\вертикали).
         {
             break; // Если все ячейки в строке\столбце открыты - выходим из цикла и объявляем победителя.
         }
-        IO::Render(m_field,m_players); // Отрисовываем поле в начале игры.
 
         action  = IO::GetAction(); // Ждём нажатия клавиши, соответствующей одному из возможных действий игрока.
 
@@ -69,16 +70,13 @@ void Game::PlayGame() // Основная логика игры.
         }
         else
         {
-            if(grantedDirection == OpenIt::Axis::HORIZONTAL && (action == OpenIt::Action::LEFT || action == OpenIt::Action::RIGHT)) // **Как-то туповато выглядит.**
-            {
-                m_field.Move(action);
-            }
-            if(grantedDirection == OpenIt::Axis::VERTICAL && (action == OpenIt::Action::UP || action == OpenIt::Action::DOWN))
+            // Проверяем разрешённое направление движения и нажатую клавишу. Например, горизонтальное направление и клавиши для движения влево\вправо.
+            if((grantedDirection == OpenIt::Axis::HORIZONTAL && (action == OpenIt::Action::LEFT || action == OpenIt::Action::RIGHT)) ||
+                (grantedDirection == OpenIt::Axis::VERTICAL && (action == OpenIt::Action::UP || action == OpenIt::Action::DOWN)))
             {
                 m_field.Move(action);
             }
         }
-        IO::Render(m_field,m_players);
     }
     SetWinner(); // Устанавливаем победителя.
     GetWinner(); // Выводим информацию о победителе на экран.
