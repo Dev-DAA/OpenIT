@@ -6,6 +6,8 @@ set (SOURCE
     game.h
     player.cpp
     player.h
+    io.h
+    io.cpp
     common.h
 )
 

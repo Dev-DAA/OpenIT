@@ -3,27 +3,21 @@
 OpenIt::Action IO::GetAction() // Получаем действие для выполнения при нажатии клавиши.
 {
     char ch;
-    OpenIt::Action dir = OpenIt::Action::STAY;
     while(true)
     {
         std::cin >> ch;
         switch(ch)
         {
             case 'a' :
-                dir = OpenIt::Action::LEFT;
-                return dir;
+                return OpenIt::Action::LEFT;
             case 'd' :
-                dir = OpenIt::Action::RIGHT;
-                return dir;
+                return OpenIt::Action::RIGHT;
             case 'w' :
-                dir = OpenIt::Action::UP;
-                return dir;
+                return OpenIt::Action::UP;
             case 's' :
-                dir = OpenIt::Action::DOWN;
-                return dir;
+                return OpenIt::Action::DOWN;
             case 'o' :
-                dir = OpenIt::Action::OPENCELL;
-                return dir;    
+                return OpenIt::Action::OPENCELL;    
         }
     }
 }
