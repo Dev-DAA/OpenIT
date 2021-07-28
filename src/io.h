@@ -5,6 +5,7 @@
 #include <fcntl.h> // _O_U16TEXT
 #include <io.h>    // _setmode, _fileno
 #include <string>
+#include <iomanip>
 
 #include "player.h"
 #include "common.h"
@@ -27,9 +28,9 @@ class IO
 {
     public:
         IO() = default;
-        static OpenIt::Action GetAction(OpenIt::Axis axis); // Получаем действие для выполнения при нажатии клавиши.
+        static OpenIt::Action GetAction(); // Получаем действие для выполнения при нажатии клавиши.
         
-        static void DrawField(const thearray &, const Player *);     // Отрисовываем игровое поле. 
+        static void Render(const Field &, const Player *);     // Отрисовываем игровое поле. 
 
     ~IO() = default;
 };

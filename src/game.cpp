@@ -54,9 +54,9 @@ void Game::PlayGame() // Основная логика игры.
         {
             break; // Если все ячейки в строке\столбце открыты - выходим из цикла и объявляем победителя.
         }
-        m_io.DrawField(m_field.GetField(),m_players); // Отрисовываем поле в начале игры.
+        IO::Render(m_field,m_players); // Отрисовываем поле в начале игры.
 
-        action  = m_io.GetAction(grantedDirection); // Если в строке\столбце есть свободные ячейки, то двигаемся в направлении action.
+        action  = IO::GetAction(); // Ждём нажатия клавиши, соответствующей одному из возможных действий игрока.
 
         if (action == OpenIt::Action::OPENCELL)
         {
@@ -69,9 +69,16 @@ void Game::PlayGame() // Основная логика игры.
         }
         else
         {
-            m_field.Move(action);
+            if(grantedDirection == OpenIt::Axis::HORIZONTAL && (action == OpenIt::Action::LEFT || action == OpenIt::Action::RIGHT)) // **Как-то туповато выглядит.**
+            {
+                m_field.Move(action);
+            }
+            if(grantedDirection == OpenIt::Axis::VERTICAL && (action == OpenIt::Action::UP || action == OpenIt::Action::DOWN))
+            {
+                m_field.Move(action);
+            }
         }
-        m_io.DrawField(m_field.GetField(),m_players);
+        IO::Render(m_field,m_players);
     }
     SetWinner(); // Устанавливаем победителя.
     GetWinner(); // Выводим информацию о победителе на экран.
