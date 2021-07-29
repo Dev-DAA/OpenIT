@@ -8,6 +8,7 @@ set (SOURCE
     player.h
     io.h
     io.cpp
+    ../cppconlib/include/conmanip.h
     common.h
 )
 

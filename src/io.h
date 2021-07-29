@@ -9,6 +9,7 @@
 
 #include "player.h"
 #include "common.h"
+#include "../cppconlib/include/conmanip.h"
 
 #define LT  L"\x250C" // Left-Top corner
 #define RT  L"\x2510" // Right-Top corner
@@ -23,6 +24,7 @@
 #define TRB L"\x255D" // Thick Right-Bottom corner
 #define TH  L"\x2550" // Thick Horizontal
 #define TV  L"\x2551" // Thick Vertical
+
 
 class IO
 {

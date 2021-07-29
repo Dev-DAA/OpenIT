@@ -43,7 +43,8 @@ void Game::NewGame() // Инициализация поля, установка 
 
 void Game::PlayGame() // Основная логика игры.
 {
-    OpenIt::Action action = OpenIt::Action::STAY;
+    bool Exit = 0; // Флаг Exit. Используется для НЕвызова методов SetWinner() и GetWinner() при аварийном выходе из игры. 
+    OpenIt::Action action;
     int16_t      nscore       = 0; // Используется при присвоении значения открытой ячейки.
     unsigned int activePlayer = 0; // Индекс текущего игрока.
     while (m_winner == OpenIt::Winner::Empty)
@@ -68,6 +69,18 @@ void Game::PlayGame() // Основная логика игры.
                 activePlayer = (activePlayer + 1) % 2; // Если значение ячейки было ненулевым - передаём ход игроку 2.
             }
         }
+        else if (action == OpenIt::Action::EXIT)
+        {
+            std::cout << "Current game was interrupted by user!\n";
+            Exit = 1;
+            break; // Завершение игры по желанию пользователя.
+        }
+        else if (action == OpenIt::Action::NEWGAME)
+        {
+            NewGame();
+            m_players[0].AddScore(-m_players[0].GetScore()); // Поскольку метод SetScore() не целесообразен, пришлось обнулиться таким образом.
+            m_players[1].AddScore(-m_players[1].GetScore());
+        }
         else
         {
             // Проверяем разрешённое направление движения и нажатую клавишу. Например, горизонтальное направление и клавиши для движения влево\вправо.
@@ -78,6 +91,10 @@ void Game::PlayGame() // Основная логика игры.
             }
         }
     }
-    SetWinner(); // Устанавливаем победителя.
-    GetWinner(); // Выводим информацию о победителе на экран.
+    if(!Exit)
+    {
+        SetWinner(); // Устанавливаем победителя.
+        GetWinner(); // Выводим информацию о победителе на экран.
+    }
+    system("pause");
 }

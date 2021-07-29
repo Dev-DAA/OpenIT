@@ -6,8 +6,8 @@
 
 #include "common.h"
 
-#define FIELD_LENGTH 8
-#define FIELD_HEIGHT 8
+#define FIELD_LENGTH 4
+#define FIELD_HEIGHT 4
 
 typedef std::array<int8_t, FIELD_LENGTH * FIELD_HEIGHT> thearray;
 

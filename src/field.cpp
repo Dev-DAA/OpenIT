@@ -67,7 +67,7 @@ void Field::Move(
     {
         m_coordinates.x -= 1;
     }
-    if (direction == OpenIt::Action::RIGHT && m_coordinates.x < m_length)
+    if (direction == OpenIt::Action::RIGHT && m_coordinates.x < (m_length - 1))
     {
         m_coordinates.x += 1;
     }
@@ -75,7 +75,7 @@ void Field::Move(
     {
         m_coordinates.y -= 1;
     }
-    if (direction == OpenIt::Action::DOWN && m_coordinates.y < m_height)
+    if (direction == OpenIt::Action::DOWN && m_coordinates.y < (m_height - 1))
     {
         m_coordinates.y += 1;
     }
