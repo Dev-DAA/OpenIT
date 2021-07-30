@@ -1,4 +1,5 @@
 #include "io.h"
+#include "../cppconlib/include/conmanip.h"
 
 OpenIt::Action IO::GetAction() // Получаем действие для выполнения при нажатии клавиши.
 {
@@ -45,9 +46,9 @@ void IO::Render(const Field& obj, const Player* player)
         for (auto col = 0; col < FIELD_LENGTH; ++col)
         {
             if (indexCursor == row * FIELD_LENGTH + col)
-                std::wcout << TLT << TH << TH << TH << TH << TH << TRT;
+                std::wcout << TLT_C << TH_L << TH_L << TH_L << TH_L << TH_L << TRT_C;
             else
-                std::wcout << LT << H << H << H << H << H << RT;
+                std::wcout << LT_C << H_L << H_L << H_L << H_L << H_L << RT_C;
         }
         std::wcout << '\n';
 
@@ -55,13 +56,13 @@ void IO::Render(const Field& obj, const Player* player)
         for (auto col = 0; col < FIELD_LENGTH; ++col)
         {
             auto index = row * FIELD_LENGTH + col;
-            std::wcout << (indexCursor == index ? TV : V) << " ";
+            std::wcout << (indexCursor == index ? TV_L : V_L) << " ";
             tempArr[index] > 0 ? conout.settextcolor(conmanip::console_text_colors::green)
                                : tempArr[index] < 0 ? conout.settextcolor(conmanip::console_text_colors::red)
                                                     : conout.settextcolor(conmanip::console_text_colors::white);
             std::wcout << std::setw(3) << tempArr[index] << " ";
             conout.resetcolors();
-            std::wcout << (indexCursor == index ? TV : V);
+            std::wcout << (indexCursor == index ? TV_L : V_L);
         }
         std::wcout << '\n';
 
@@ -69,9 +70,9 @@ void IO::Render(const Field& obj, const Player* player)
         for (auto col = 0; col < FIELD_LENGTH; ++col)
         {
             if (indexCursor == row * FIELD_LENGTH + col)
-                std::wcout << TLB << TH << TH << TH << TH << TH << TRB;
+                std::wcout << TLB_C << TH_L << TH_L << TH_L << TH_L << TH_L << TRB_C;
             else
-                std::wcout << LB << H << H << H << H << H << RB;
+                std::wcout << LB_C << H_L << H_L << H_L << H_L << H_L << RB_C;
         }
         std::wcout << '\n';
     }

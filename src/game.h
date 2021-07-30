@@ -1,7 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "../cppconlib/include/conmanip.h"
 
 #include "player.h"
 #include "io.h"
