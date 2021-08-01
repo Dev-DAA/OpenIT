@@ -1,6 +1,7 @@
 #include "game.h"
 
 #include <iostream>
+#include <windows.h>
 
 void Game::SetWinner() // Присвоение статуса игрокам в конце игры и вывод информации на экран.
 {
@@ -43,22 +44,30 @@ void Game::NewGame() // Инициализация поля, установка 
 
 void Game::PlayGame() // Основная логика игры.
 {
-    bool Exit = 0; // Флаг Exit. Используется для НЕвызова методов SetWinner() и GetWinner() при аварийном выходе из игры. 
+    bool Exit = 0; // Флаг Exit. Используется для НЕвызова методов SetWinner() и GetWinner() при аварийном выходе из игры.
     OpenIt::Action action;
-    int16_t      nscore       = 0; // Используется при присвоении значения открытой ячейки.
+    int16_t nscore = 0; // Используется при присвоении значения открытой ячейки.
     unsigned int activePlayer = 0; // Индекс текущего игрока.
     while (m_winner == OpenIt::Winner::Empty)
     {
-        OpenIt::Axis grantedDirection = m_players[activePlayer].GrantedDirection(); // Получаем разрешённое направление движения.
+        OpenIt::Axis grantedDirection =
+            m_players[activePlayer].GrantedDirection(); // Получаем разрешённое направление движения.
 
-        IO::Render(m_field,m_players); // Отрисовываем поле в начале игры.
-        
-        if (m_field.IsLineEmpty(grantedDirection)) // Проверяем наличие неоткрытых ячеек у активного игрока (по горизонтали\вертикали).
+        IO::Render(m_field, m_players); // Отрисовываем поле в начале игры.
+
+        COORD cPosition = { 0, 13 }; // Определяем структуру типа COORD (winApi) для установки курсора в консоли.
+        HANDLE osHandle = GetStdHandle(STD_OUTPUT_HANDLE); // Получаем дексриптор ввода\вывода. (winApi)
+        if (osHandle != INVALID_HANDLE_VALUE)
+        {
+            SetConsoleCursorPosition(osHandle, cPosition); // Устанавливаем курсор на требуемую позицию. (winApi)
+        }
+
+        if (m_field.IsLineEmpty(
+                grantedDirection)) // Проверяем наличие неоткрытых ячеек у активного игрока (по горизонтали\вертикали).
         {
             break; // Если все ячейки в строке\столбце открыты - выходим из цикла и объявляем победителя.
         }
-
-        action  = IO::GetAction(); // Ждём нажатия клавиши, соответствующей одному из возможных действий игрока.
+        action = IO::GetAction(); // Ждём нажатия клавиши, соответствующей одному из возможных действий игрока.
 
         if (action == OpenIt::Action::OPENCELL)
         {
@@ -78,23 +87,27 @@ void Game::PlayGame() // Основная логика игры.
         else if (action == OpenIt::Action::NEWGAME)
         {
             NewGame();
-            m_players[0].AddScore(-m_players[0].GetScore()); // Поскольку метод SetScore() не целесообразен, пришлось обнулиться таким образом.
+            m_players[0].AddScore(-m_players[0].GetScore()); // Обнуляем счёт.
             m_players[1].AddScore(-m_players[1].GetScore());
         }
         else
         {
-            // Проверяем разрешённое направление движения и нажатую клавишу. Например, горизонтальное направление и клавиши для движения влево\вправо.
-            if((grantedDirection == OpenIt::Axis::HORIZONTAL && (action == OpenIt::Action::LEFT || action == OpenIt::Action::RIGHT)) ||
-                (grantedDirection == OpenIt::Axis::VERTICAL && (action == OpenIt::Action::UP || action == OpenIt::Action::DOWN)))
+            // Проверяем разрешённое направление движения и нажатую клавишу. Например, горизонтальное направление и
+            // клавиши для движения влево\вправо.
+            if ((grantedDirection == OpenIt::Axis::HORIZONTAL &&
+                 (action == OpenIt::Action::LEFT || action == OpenIt::Action::RIGHT)) ||
+                (grantedDirection == OpenIt::Axis::VERTICAL &&
+                 (action == OpenIt::Action::UP || action == OpenIt::Action::DOWN)))
             {
                 m_field.Move(action);
             }
         }
     }
-    if(!Exit)
+    if (!Exit)
     {
         SetWinner(); // Устанавливаем победителя.
         GetWinner(); // Выводим информацию о победителе на экран.
     }
+
     system("pause");
 }

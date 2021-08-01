@@ -31,7 +31,7 @@ class Field // Класс Поле, состоящий из FIELD_LENGTH * FIELD
     Field();
     ~Field() = default;
 
-    uint8_t GetIndex(const Coordinates &obj) const; // Получаем индекс на основе переданной структуры.
+    uint8_t GetIndex(const Coordinates& obj) const; // Получаем индекс на основе переданной структуры.
 
     void InitField(); // Инициализируем ячейки поля рандомными значениями m_value от -/+1 до -/+11.
                       // Устанавливаем текущую позицию на середину поля.

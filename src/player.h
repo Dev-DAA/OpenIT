@@ -22,7 +22,7 @@ class Player
 
     OpenIt::Axis GrantedDirection() const; // Получаем разрешённое направление движения.
 
-    //OpenIt::Direction GetDirection(char ch) const; // Получаем направление движения в зависимости от нажатой клавиши.
+    // OpenIt::Direction GetDirection(char ch) const; // Получаем направление движения в зависимости от нажатой клавиши.
 };
 
 #endif

@@ -20,5 +20,3 @@ OpenIt::Axis Player::GrantedDirection() const
 {
     return m_cursor;
 }
-
-

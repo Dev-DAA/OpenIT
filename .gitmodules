@@ -1,0 +1,3 @@
+[submodule "cppconlib"]
+	path = cppconlib
+	url = https://github.com/mariusbancila/cppconlib.git
