@@ -22,8 +22,8 @@ void Field::InitField() // Инициализируем ячейки поля р
 {
     for (uint8_t i = 0; i < m_length * m_height; ++i)
     {
-        uint8_t cellValue = rand() % 11 + 1;
-        uint8_t cellSign  = rand() % 2;
+        uint8_t cellValue               = rand() % 11 + 1;
+        uint8_t cellSign                = rand() % 2;
         cellSign == 1 ? m_playground[i] = cellValue : m_playground[i] = -cellValue;
     }
     m_coordinates.x = m_length / 2;

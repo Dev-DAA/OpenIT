@@ -18,6 +18,8 @@ class Player
 
     int16_t GetScore() const; // Получаем текущий счёт игрока.
 
+    void SetScore(); // Обнуляем счёт игрока при новой игре.
+
     void AddScore(int16_t nscore); // Увеличение счёта игрока на nscore очков.
 
     OpenIt::Axis GrantedDirection() const; // Получаем разрешённое направление движения.

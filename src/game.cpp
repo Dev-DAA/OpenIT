@@ -40,11 +40,16 @@ void Game::NewGame() // Инициализация поля, установка 
 {
     m_field.InitField();
     m_winner = OpenIt::Winner::Empty;
+    m_players[0].SetScore();
+    m_players[1].SetScore();
 }
 
 void Game::PlayGame() // Основная логика игры.
 {
-    bool Exit = 0; // Флаг Exit. Используется для НЕвызова методов SetWinner() и GetWinner() при аварийном выходе из игры.
+label_new_game:
+    NewGame();
+    bool Exit =
+        0; // Флаг Exit. Используется для НЕвызова методов SetWinner() и GetWinner() при аварийном выходе из игры.
     OpenIt::Action action;
     int16_t nscore = 0; // Используется при присвоении значения открытой ячейки.
     unsigned int activePlayer = 0; // Индекс текущего игрока.
@@ -67,6 +72,7 @@ void Game::PlayGame() // Основная логика игры.
         {
             break; // Если все ячейки в строке\столбце открыты - выходим из цикла и объявляем победителя.
         }
+
         action = IO::GetAction(); // Ждём нажатия клавиши, соответствующей одному из возможных действий игрока.
 
         if (action == OpenIt::Action::OPENCELL)
@@ -86,9 +92,8 @@ void Game::PlayGame() // Основная логика игры.
         }
         else if (action == OpenIt::Action::NEWGAME)
         {
-            NewGame();
-            m_players[0].AddScore(-m_players[0].GetScore()); // Обнуляем счёт.
-            m_players[1].AddScore(-m_players[1].GetScore());
+            NewGame(); // Новая игра по желанию пользователя.
+            activePlayer = 0;
         }
         else
         {
@@ -107,7 +112,18 @@ void Game::PlayGame() // Основная логика игры.
     {
         SetWinner(); // Устанавливаем победителя.
         GetWinner(); // Выводим информацию о победителе на экран.
+        std::cout << "Do you want to play one more time? y/n\n";
+        char answer;
+        std::cin >> answer;
+        if (answer == 'y')
+        {
+            goto label_new_game; // Переходим на метку начала игры.
+        }
+        else
+        {
+            goto label_exit_game; // Переходим на метку конца игры.
+        }
     }
-
+label_exit_game:
     system("pause");
 }

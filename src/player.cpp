@@ -6,6 +6,11 @@ Player::Player(OpenIt::Axis ncursor) : m_cursor(ncursor)
 {
 }
 
+void Player::SetScore()
+{
+    m_score = 0;
+}
+
 int16_t Player::GetScore() const
 {
     return m_score;
