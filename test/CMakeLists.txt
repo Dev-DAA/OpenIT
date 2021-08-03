@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.1)
 set(TEST_SOURCES testfield.cpp testgame.cpp testplayer.cpp)
 
 add_executable(testcode ${TEST_SOURCES})
-target_include_directories(testcode PUBLIC ../src)
+target_include_directories(testcode PUBLIC ${GTEST_SOURCE_DIR}/include)
 
 find_library(GTEST_LIB gtestd ${CMAKE_BINARY_DIR}/lib/Debug)
 find_library(GMOCK_LIB gmockd ${CMAKE_BINARY_DIR}/lib/Debug)

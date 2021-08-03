@@ -46,10 +46,8 @@ void Game::NewGame() // Инициализация поля, установка 
 
 void Game::PlayGame() // Основная логика игры.
 {
-label_new_game:
     NewGame();
-    bool Exit =
-        0; // Флаг Exit. Используется для НЕвызова методов SetWinner() и GetWinner() при аварийном выходе из игры.
+    bool Exit = 0; // Флаг Exit. Используется для НЕвызова методов SetWinner() и GetWinner() при аварийном выходе из игры.
     OpenIt::Action action;
     int16_t nscore = 0; // Используется при присвоении значения открытой ячейки.
     unsigned int activePlayer = 0; // Индекс текущего игрока.
@@ -112,18 +110,5 @@ label_new_game:
     {
         SetWinner(); // Устанавливаем победителя.
         GetWinner(); // Выводим информацию о победителе на экран.
-        std::cout << "Do you want to play one more time? y/n\n";
-        char answer;
-        std::cin >> answer;
-        if (answer == 'y')
-        {
-            goto label_new_game; // Переходим на метку начала игры.
-        }
-        else
-        {
-            goto label_exit_game; // Переходим на метку конца игры.
-        }
     }
-label_exit_game:
-    system("pause");
 }
