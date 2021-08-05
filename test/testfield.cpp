@@ -14,50 +14,87 @@ TEST_F(FieldTest, IsEqualToZero)
         EXPECT_NE(temparr[i],0);
 }
 
-TEST_F(FieldTest, CheckMove)
-{
-    uint8_t expectedIndex = field.GetIndex(field.GetCoordinates());
-    EXPECT_EQ(10, expectedIndex);
-    OpenIt::Action action = OpenIt::Action::RIGHT;
-    field.Move(action);
-    expectedIndex = field.GetIndex(field.GetCoordinates());
-    EXPECT_EQ(11, expectedIndex);
-    action = OpenIt::Action::RIGHT;
-    field.Move(action);
-    expectedIndex = field.GetIndex(field.GetCoordinates());
-    ASSERT_NE(12,expectedIndex); //  Добавить равенство по границам.
-    action = OpenIt::Action::LEFT;
-    field.Move(action);
-    field.Move(action);
-    field.Move(action);
-    field.Move(action);
-    expectedIndex = field.GetIndex(field.GetCoordinates());
-    EXPECT_EQ(8,expectedIndex);
-    field.Move(action);
-    expectedIndex = field.GetIndex(field.GetCoordinates());
-    EXPECT_NE(7,expectedIndex);
-    action = OpenIt::Action::DOWN;
-    field.Move(action);
-    expectedIndex = field.GetIndex(field.GetCoordinates());
-    EXPECT_EQ(12,expectedIndex);
-    field.Move(action);
-    expectedIndex = field.GetIndex(field.GetCoordinates());
-    ASSERT_NE(16,expectedIndex);
-    action = OpenIt::Action::UP;
-    field.Move(action);
-    field.Move(action);
-    expectedIndex = field.GetIndex(field.GetCoordinates());
-    EXPECT_EQ(4,expectedIndex);
-    field.Move(action);
-    expectedIndex = field.GetIndex(field.GetCoordinates());
-    EXPECT_EQ(0,expectedIndex);
-    field.Move(action);
-    expectedIndex = field.GetIndex(field.GetCoordinates());
-    ASSERT_NE(4294967295,expectedIndex);  
-}
-
 TEST_F(FieldTest, IsCoordinateCentered)
 {
     EXPECT_EQ(field.GetIndex(field.GetCoordinates()),FIELD_LENGTH*FIELD_LENGTH/2 + FIELD_HEIGHT/2); 
 }
+
+TEST_F(FieldTest, CheckMove)
+{
+    uint8_t expectedIndex = 0;
+    int8_t counter = 0;
+    bool moved = 0;
+    OpenIt::Action dir = OpenIt::Action::RIGHT;
+    uint8_t length  = FIELD_LENGTH;
+    uint8_t height = FIELD_HEIGHT;
+    while(true)
+    {
+        uint8_t central = length*length/2+height/2;
+        while(true)
+        {
+            moved = field.Move(dir);
+            dir == OpenIt::Action::RIGHT ? counter +=1 : counter -=1;
+            expectedIndex = field.GetIndex(field.GetCoordinates());
+            if(moved)
+            {
+                EXPECT_EQ(central+counter, expectedIndex);
+                if(dir == OpenIt::Action::RIGHT && counter == 0){
+                    dir = OpenIt::Action::DOWN;
+                    break;
+                }
+            }
+            else
+            {
+                if(dir == OpenIt::Action::RIGHT)
+                {
+                    ASSERT_NE(central + counter, expectedIndex);
+                    EXPECT_EQ(central + counter -1, expectedIndex);
+                    counter -=1;
+                    dir = OpenIt::Action::LEFT;
+                }
+                else
+                {
+                    ASSERT_NE(central + counter -1, expectedIndex);
+                    EXPECT_EQ(central + counter, expectedIndex);
+                    counter +=1;
+                    dir = OpenIt::Action::RIGHT;
+                }
+            }
+        }
+        while(true)
+        {
+            moved = field.Move(dir);
+            dir == OpenIt::Action::UP ? counter +=1 : counter -=1;
+            expectedIndex = field.GetIndex(field.GetCoordinates());
+            if(moved)
+            {
+                EXPECT_EQ(central + counter*length, expectedIndex);
+
+            }
+            else
+            {
+                if(dir == OpenIt::Action::DOWN)
+                {
+                    ASSERT_NE(central+counter*length, expectedIndex);
+                    EXPECT_EQ(central+(counter-1)*length,expectedIndex);
+                    counter -=1;
+                    dir = OpenIt::Action::UP;
+                }
+                else
+                {
+                    ASSERT_NE(central+counter*length,expectedIndex);
+                    EXPECT_EQ(central+(counter+1)*length,expectedIndex);
+                }
+
+            }
+
+        }
+    }
+
+
+
+
+
+}
+
 

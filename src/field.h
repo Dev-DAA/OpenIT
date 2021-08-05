@@ -42,7 +42,7 @@ class Field // Класс Поле, состоящий из FIELD_LENGTH * FIELD
 
     bool IsLineEmpty(OpenIt::Axis line) const; // Проверяем строку\столбец на наличие неоткрытых ячеек.
 
-    void Move(OpenIt::Action direction); // Смещение курсора в указанном направлении.
+    bool Move(OpenIt::Action direction); // Смещение курсора в указанном направлении.
 
     int8_t Open();
 };
