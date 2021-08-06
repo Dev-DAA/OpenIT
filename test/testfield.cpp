@@ -61,6 +61,11 @@ TEST_F(FieldTest, MoveWithBiasToUpperLeftCorner)
                     EXPECT_EQ(central + counter +1, expectedIndex);
                     counter +=1;
                     dir = OpenIt::Action::RIGHT;
+                    if(counter == 0)
+                    {
+                        dir = OpenIt::Action::DOWN;
+                    }
+
                 }
             }
         }

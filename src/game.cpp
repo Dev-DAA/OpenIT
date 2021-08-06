@@ -58,7 +58,7 @@ void Game::PlayGame() // Основная логика игры.
 
         IO::Render(m_field, m_players); // Отрисовываем поле в начале игры.
 
-        COORD cPosition = { 0, 13 }; // Определяем структуру типа COORD (winApi) для установки курсора в консоли.
+        COORD cPosition = { 0, 3*FIELD_LENGTH+1 }; // Определяем структуру типа COORD (winApi) для установки курсора в консоли.
         HANDLE osHandle = GetStdHandle(STD_OUTPUT_HANDLE); // Получаем дексриптор ввода\вывода. (winApi)
         if (osHandle != INVALID_HANDLE_VALUE)
         {
