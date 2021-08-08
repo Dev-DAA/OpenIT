@@ -5,7 +5,7 @@
 int main()
 {
     Game game;
-    while(true)
+    while (true)
     {
         game.PlayGame();
         std::cout << "Do you want to play one more time? y/n\n";

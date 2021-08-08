@@ -18,7 +18,7 @@ void Game::SetWinner() // Присвоение статуса игрокам в 
         m_winner = OpenIt::Winner::Draw;
     }
 }
-OpenIt::Winner Game::GetWinner() const
+OpenIt::Winner Game::GetWinner() const // Возвращаем победителя игры.
 {
     if (m_winner == OpenIt::Winner::Player1)
     {
@@ -47,7 +47,8 @@ void Game::NewGame() // Инициализация поля, установка 
 void Game::PlayGame() // Основная логика игры.
 {
     NewGame();
-    bool Exit = 0; // Флаг Exit. Используется для НЕвызова методов SetWinner() и GetWinner() при аварийном выходе из игры.
+    bool Exit =
+        0; // Флаг Exit. Используется для НЕвызова методов SetWinner() и GetWinner() при аварийном выходе из игры.
     OpenIt::Action action;
     int16_t nscore = 0; // Используется при присвоении значения открытой ячейки.
     unsigned int activePlayer = 0; // Индекс текущего игрока.
@@ -58,7 +59,8 @@ void Game::PlayGame() // Основная логика игры.
 
         IO::Render(m_field, m_players); // Отрисовываем поле в начале игры.
 
-        COORD cPosition = { 0, 3*FIELD_LENGTH+1 }; // Определяем структуру типа COORD (winApi) для установки курсора в консоли.
+        COORD cPosition = { 0, 3 * FIELD_LENGTH +
+                                   1 }; // Определяем структуру типа COORD (winApi) для установки курсора в консоли.
         HANDLE osHandle = GetStdHandle(STD_OUTPUT_HANDLE); // Получаем дексриптор ввода\вывода. (winApi)
         if (osHandle != INVALID_HANDLE_VALUE)
         {

@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 
-
-set(TEST_SOURCES testfield.cpp testgame.cpp testplayer.cpp ../src/field.h ../src/field.cpp ../src/game.h ../src/game.cpp ../src/player.h ../src/player.cpp ../src/common.h ../src/io.h ../src/io.cpp)
-#set(TEST_SOURCES ${CMAKE_SOURCE_DIR}/test/*.cpp ${CMAKE_SOURCE_DIR}/src/*.h ${CMAKE_SOURCE_DIR}/src/*.cpp)
+set(SRC ../src)
+set(TEST_SOURCES testfield.cpp testgame.cpp testplayer.cpp ${SRC}/field.h ${SRC}/field.cpp ${SRC}/game.h ${SRC}/game.cpp ${SRC}/player.h ${SRC}/player.cpp ${SRC}/common.h ${SRC}/io.h ${SRC}/io.cpp)
 add_executable(testcode ${TEST_SOURCES})
 target_include_directories(testcode PUBLIC ${GTEST_SOURCE_DIR}/include)
 
