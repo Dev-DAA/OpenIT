@@ -3,6 +3,8 @@
 
 #include <fcntl.h> // _O_U16TEXT
 #include <io.h>    // _setmode, _fileno
+#include <conio.h> // _getch()
+#include <windows.h> // GetAsyncKeyState()
 #include <iomanip>
 #include <iostream>
 #include <string>

@@ -6,11 +6,11 @@
 
 OpenIt::Action IO::GetAction() // Получаем действие для выполнения при нажатии клавиши.
 {
-    std::string ch;
+    int ch;
     while (true)
     {
-        getline(std::cin, ch);
-        switch (ch[0])
+        ch = _getch(); // Считываем символ не печатая его в консоли.
+        switch (ch)
         {
             case 'a':
                 return OpenIt::Action::LEFT;
