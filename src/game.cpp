@@ -1,7 +1,6 @@
 #include "game.h"
 
 #include <iostream>
-#include <windows.h>
 
 void Game::SetWinner() // Присвоение статуса игрокам в конце игры и вывод информации на экран.
 {

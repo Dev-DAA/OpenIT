@@ -12,7 +12,8 @@ namespace OpenIt
         RIGHT,
         OPENCELL,
         EXIT,
-        NEWGAME
+        NEWGAME,
+        STAY
     };
 
     // Используется для проверки строки/столбца на неоткрытые ячейки.
