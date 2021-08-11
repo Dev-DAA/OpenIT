@@ -46,23 +46,21 @@ void Game::NewGame() // Инициализация поля, установка 
 void Game::PlayGame() // Основная логика игры.
 {
     NewGame();
-    bool Exit =
-        0; // Флаг Exit. Используется для НЕвызова методов SetWinner() и GetWinner() при аварийном выходе из игры.
     OpenIt::Action action;
     int16_t nscore = 0; // Используется при присвоении значения открытой ячейки.
     unsigned int activePlayer = 0; // Индекс текущего игрока.
-    while (m_winner == OpenIt::Winner::Empty)
+    while (true)
     {
         OpenIt::Axis grantedDirection =
             m_players[activePlayer].GrantedDirection(); // Получаем разрешённое направление движения.
 
         IO::Render(m_field, m_players); // Отрисовываем поле в начале игры.
 
-        COORD cPosition = { 0, 3 * FIELD_LENGTH +
-                                   1 }; // Определяем структуру типа COORD (winApi) для установки курсора в консоли.
         HANDLE osHandle = GetStdHandle(STD_OUTPUT_HANDLE); // Получаем дексриптор ввода\вывода. (winApi)
         if (osHandle != INVALID_HANDLE_VALUE)
         {
+            COORD cPosition = { 0, 3 * FIELD_LENGTH +
+                                   1 }; // Определяем структуру типа COORD (winApi) для установки курсора в консоли.
             SetConsoleCursorPosition(osHandle, cPosition); // Устанавливаем курсор на требуемую позицию. (winApi)
         }
 
@@ -86,8 +84,7 @@ void Game::PlayGame() // Основная логика игры.
         else if (action == OpenIt::Action::EXIT)
         {
             std::cout << "Current game was interrupted by user!\n";
-            Exit = 1;
-            break; // Завершение игры по желанию пользователя.
+            return; // Завершение игры по желанию пользователя.
         }
         else if (action == OpenIt::Action::NEWGAME)
         {
@@ -107,9 +104,7 @@ void Game::PlayGame() // Основная логика игры.
             }
         }
     }
-    if (!Exit)
-    {
-        SetWinner(); // Устанавливаем победителя.
-        GetWinner(); // Выводим информацию о победителе на экран.
-    }
+    SetWinner(); // Устанавливаем победителя.
+    GetWinner(); // Выводим информацию о победителе на экран.
+
 }
