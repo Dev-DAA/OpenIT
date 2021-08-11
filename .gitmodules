@@ -1,0 +1,7 @@
+[submodule "cppconlib"]
+	path = cppconlib
+	url = https://github.com/mariusbancila/cppconlib.git
+
+[submodule "googletest"]
+	path = googletest
+	url = https://github.com/google/googletest.git
