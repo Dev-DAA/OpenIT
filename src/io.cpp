@@ -73,9 +73,15 @@ void IO::Render(const Field& obj, const Player* player)
         for (auto col = 0; col < FIELD_LENGTH; ++col)
         {
             if (indexCursor == row * FIELD_LENGTH + col)
+            {
+                conout.settextcolor(conmanip::console_text_colors::light_cyan);
                 std::wcout << TLT_C << TH_L << TH_L << TH_L << TH_L << TH_L << TRT_C;
+            }
             else
+            {
+                conout.settextcolor(conmanip::console_text_colors::white);
                 std::wcout << LT_C << H_L << H_L << H_L << H_L << H_L << RT_C;
+            }
         }
         std::wcout << '\n';
 
@@ -83,13 +89,31 @@ void IO::Render(const Field& obj, const Player* player)
         for (auto col = 0; col < FIELD_LENGTH; ++col)
         {
             auto index = row * FIELD_LENGTH + col;
-            std::wcout << (indexCursor == index ? TV_L : V_L) << " ";
+            if(indexCursor == index)
+            {
+                conout.settextcolor(conmanip::console_text_colors::light_cyan);
+                std::wcout << TV_L;
+            }
+            else
+            {
+                conout.settextcolor(conmanip::console_text_colors::white);
+                std::wcout << V_L;
+            }
+            std::wcout << " ";
             tempArr[index] > 0 ? conout.settextcolor(conmanip::console_text_colors::green)
                                : conout.settextcolor(conmanip::console_text_colors::red);
             tempArr[index] != 0 ? std::wcout << std::setw(3) << tempArr[index] << " "
                                 : std::wcout << std::setw(4) << " ";
-            conout.resetcolors();
-            std::wcout << (indexCursor == index ? TV_L : V_L);
+            if(indexCursor == index)
+            {
+                conout.settextcolor(conmanip::console_text_colors::light_cyan);
+                std::wcout << TV_L;
+            }
+            else
+            {
+                conout.settextcolor(conmanip::console_text_colors::white);
+                std::wcout << V_L;
+            }
         }
         std::wcout << '\n';
 
@@ -97,9 +121,15 @@ void IO::Render(const Field& obj, const Player* player)
         for (auto col = 0; col < FIELD_LENGTH; ++col)
         {
             if (indexCursor == row * FIELD_LENGTH + col)
+            {
+                conout.settextcolor(conmanip::console_text_colors::light_cyan);
                 std::wcout << TLB_C << TH_L << TH_L << TH_L << TH_L << TH_L << TRB_C;
+            }
             else
+            {
+                conout.settextcolor(conmanip::console_text_colors::white);
                 std::wcout << LB_C << H_L << H_L << H_L << H_L << H_L << RB_C;
+            }
         }
         std::wcout << '\n';
     }
