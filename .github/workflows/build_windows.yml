@@ -7,18 +7,18 @@ on:
 
 jobs:
   build:
-    runs-on: ${{matrix.os}}
+    name: ${{ matrix.platform.name }} ${{ matrix.arch.name }} ${{ matrix.type }}
+    runs-on: ${{ matrix.platform.os }}
+
     strategy:
       matrix:
-        os: [windows-2019]
+        platform:
+        - { name: VS2019, os: windows-2019 }
+        - { name: VS2022, os: windows-2022 }
         arch:
-          - platform: Win32
-            vcpkg_triplet: x86-windows
-          - platform: x64
-            vcpkg_triplet: x64-windows
-        toolset: [v141, v142]
-        standard: [17, 20]
-        build_type: [Debug, Release]
+        - { name: x86, arg: Win32, vcpkg_triplet: x86-windows }
+        - { name: x64, arg: x64, vcpkg_triplet: x64-windows }
+        type: [Debug, Release]
 
     steps:
     - uses: actions/checkout@v3
@@ -27,39 +27,38 @@ jobs:
       id: cache-vcpkg-restore
       uses: actions/cache/restore@v3
       with:
-        path: ${{github.workspace}}/vcpkg_installed
-        key: ${{matrix.os}}-${{matrix.arch.vcpkg_triplet}}-${{hashFiles('**/vcpkg.json')}}
+        path: ${{ github.workspace }}/vcpkg_installed
+        key: ${{ matrix.platform.os }}-${{ matrix.arch.vcpkg_triplet }}-${{ hashFiles('**/vcpkg.json') }}
 
     - name: Configure
       shell: bash
       run: |
         cmake \
-          -A ${{matrix.arch.platform}} \
-          -T ${{matrix.toolset}} \
-          -S$GITHUB_WORKSPACE \
-          -B$GITHUB_WORKSPACE/build \
-          -DCMAKE_CXX_STANDARD=${{matrix.standard}} \
-          -DCMAKE_BUILD_TYPE=${{matrix.build_type}} \
+          -A ${{ matrix.arch.arg }} \
+          -S $GITHUB_WORKSPACE \
+          -B $GITHUB_WORKSPACE/build \
+          -DCMAKE_BUILD_TYPE=${{ matrix.type }} \
           -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
+          -DVCPKG_TARGET_TRIPLET=${{ matrix.arch.vcpkg_triplet }} \
           -DVCPKG_INSTALLED_DIR=$GITHUB_WORKSPACE/vcpkg_installed
 
     - name: Save cached vcpkg
       id: cache-vcpkg-save
       uses: actions/cache/save@v3
       with:
-        path: ${{github.workspace}}/vcpkg_installed
-        key: ${{matrix.os}}-${{matrix.arch.vcpkg_triplet}}-${{hashFiles('**/vcpkg.json')}}
+        path: ${{ github.workspace }}/vcpkg_installed
+        key: ${{ matrix.platform.os }}-${{ matrix.arch.vcpkg_triplet }}-${{ hashFiles('**/vcpkg.json') }}
 
     - name: Build
-      working-directory: ${{github.workspace}}/build
+      working-directory: ${{ github.workspace }}/build
       run: |
         $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
-        cmake --build . --config ${{matrix.build_type}} --parallel $threads
+        cmake --build . --config ${{ matrix.type }} --parallel $threads
 
     - name: Run tests
-      working-directory: ${{github.workspace}}/build
+      working-directory: ${{ github.workspace }}/build
       env:
         CTEST_OUTPUT_ON_FAILURE: True
       run: |
         $threads = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
-        ctest -C ${{matrix.build_type}} -V
+        ctest -C ${{ matrix.type }} -V
