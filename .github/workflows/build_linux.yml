@@ -1,39 +1,71 @@
 name: Linux
 
 on:
-  push:
+  # push:
   pull_request:
     branches: [ master ]
 
 jobs:
   build:
-    runs-on: ${{matrix.os}}
+    name: ${{ matrix.compiler.name }} ${{ matrix.type }} (${{ matrix.platform.name }})
+    runs-on: ${{ matrix.platform.os }}
+
     strategy:
       matrix:
-        os: [ubuntu-20.04]
-        cxx: [g++-9, g++-10, clang++-10, clang++-11, clang++-12]
-        standard: [17, 20]
-        build_type: [Debug, Release]
+        platform:
+        - { name: Ubuntu 22.04, os: ubuntu-22.04 }
+        compiler: 
+        - { name: GNU C++ 9.5.0, cxx: g++-9 }
+        - { name: GNU C++ 10.5.0, cxx: g++-10 }
+        - { name: GNU C++ 11.4.0, cxx: g++-11 }
+        - { name: GNU C++ 12.3.0, cxx: g++-12 }
+        - { name: Clang 12.0.1, cxx: clang++-12 }
+        - { name: Clang 13.0.1, cxx: clang++-13 }
+        - { name: Clang 14.0.0, cxx: clang++-14 }
+        type: [Debug, Release]
+        include:
+        - platform: { name: Ubuntu 20.04, os: ubuntu-20.04 }
+          compiler: { name: GNU C++ 9.4.0, cxx: g++-9 }
+          type: Debug
+        - platform: { name: Ubuntu 20.04, os: ubuntu-20.04 }
+          compiler: { name: GNU C++ 9.4.0, cxx: g++-9 }
+          type: Release
+        - platform: { name: Ubuntu 20.04, os: ubuntu-20.04 }
+          compiler: { name: Clang 10.0.0, cxx: clang++-10 }
+          type: Debug
+        - platform: { name: Ubuntu 20.04, os: ubuntu-20.04 }
+          compiler: { name: Clang 10.0.0, cxx: clang++-10 }
+          type: Release
+        - platform: { name: Ubuntu 20.04, os: ubuntu-20.04 }
+          compiler: { name: Clang 11.0.0, cxx: clang++-11 }
+          type: Debug
+        - platform: { name: Ubuntu 20.04, os: ubuntu-20.04 }
+          compiler: { name: Clang 11.0.0, cxx: clang++-11 }
+          type: Release
 
     steps:
+    # Раскомментируйте эти строки, если вам нужно использовать SFML.
+    # - name: Install dependencies
+    #   run: |
+    #     apt-fast update
+    #     apt-fast install -y libx11-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev
+
     - uses: actions/checkout@v3
 
     - name: Restore cached vcpkg
       id: cache-vcpkg-restore
       uses: actions/cache/restore@v3
       with:
-        path: ${{github.workspace}}/vcpkg_installed
-        key: ${{matrix.os}}-${{matrix.arch.vcpkg_triplet}}-${{hashFiles('**/vcpkg.json')}}
+        path: ${{ github.workspace }}/vcpkg_installed
+        key: ${{ matrix.platform.os }}-${{ matrix.compiler.cxx }}-${{ hashFiles('**/vcpkg.json') }}
 
     - name: Configure
-      env:
-        CXX: ${{matrix.cxx}}
       run: |
         cmake \
           -S $GITHUB_WORKSPACE \
           -B $GITHUB_WORKSPACE/build \
-          -DCMAKE_CXX_STANDARD=${{matrix.standard}} \
-          -DCMAKE_BUILD_TYPE=${{matrix.build_type}} \
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }} \
+          -DCMAKE_BUILD_TYPE=${{ matrix.type }} \
           -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake \
           -DVCPKG_INSTALLED_DIR=$GITHUB_WORKSPACE/vcpkg_installed
 
@@ -41,17 +73,19 @@ jobs:
       id: cache-vcpkg-save
       uses: actions/cache/save@v3
       with:
-        path: ${{github.workspace}}/vcpkg_installed
-        key: ${{matrix.os}}-${{matrix.arch.vcpkg_triplet}}-${{hashFiles('**/vcpkg.json')}}
+        path: ${{ github.workspace }}/vcpkg_installed
+        key: ${{ matrix.platform.os }}-${{ matrix.compiler.cxx }}-${{ hashFiles('**/vcpkg.json') }}
 
     - name: Build
-      working-directory: ${{github.workspace}}/build
+      working-directory: ${{ github.workspace }}/build
       run: |
         threads=`nproc`
-        cmake --build . --config ${{matrix.build_type}} --parallel $threads
+        cmake --build . --config ${{ matrix.type }} --parallel $threads
 
     - name: Run tests
-      working-directory: ${{github.workspace}}/build
+      working-directory: ${{ github.workspace }}/build
+      env:
+        CTEST_OUTPUT_ON_FAILURE: True
       run: |
         threads=`nproc`
-        ctest --parallel $threads
+        ctest -C ${{ matrix.type }} -V --parallel $threads
