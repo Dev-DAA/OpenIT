@@ -54,7 +54,7 @@ jobs:
 
     - name: Restore cached vcpkg
       id: cache-vcpkg-restore
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v4
       with:
         path: ${{ github.workspace }}/vcpkg_installed
         key: ${{ matrix.platform.os }}-${{ matrix.compiler.cxx }}-${{ hashFiles('**/vcpkg.json') }}
@@ -71,7 +71,7 @@ jobs:
 
     - name: Save cached vcpkg
       id: cache-vcpkg-save
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v4
       with:
         path: ${{ github.workspace }}/vcpkg_installed
         key: ${{ matrix.platform.os }}-${{ matrix.compiler.cxx }}-${{ hashFiles('**/vcpkg.json') }}
