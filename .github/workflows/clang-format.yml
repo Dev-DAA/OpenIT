@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         ssh-key: ${{secrets.CLANG_FORMAT_PRIVATE_KEY}}
-    - uses: DoozyX/clang-format-lint-action@v0.16
+    - uses: DoozyX/clang-format-lint-action@v0.17
       with:
         source: '.'
         extensions: 'h,c,hpp,cpp'
