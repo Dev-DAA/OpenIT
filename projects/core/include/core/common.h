@@ -22,6 +22,16 @@ struct Position
 };
 
 /**
+ * @brief Оператор сравнения позиций
+ *
+ * @param current Текущая позиция
+ * @param other   Позиция для сравнения
+ * @return Возвращает true если координаты совпадают, иначе false
+ */
+bool
+operator==(const Position current, const Position other);
+
+/**
  * @brief Уровни сложности
  *
  * Значение уровня соответствует глубине поиска
