@@ -1,31 +1,82 @@
+#include <core/game.h>
 #include <core/player.h>
 #include <gtest/gtest.h>
 
 using namespace OpenIT;
 
-TEST(TestPlayer, ConstructorWithoutParameter_Check)
+#if DEPRECATED
+TEST(TestGame, Constructor)
 {
-  Player player;
+  // ToDo Constractor test
+  Game game;
 
-  ASSERT_EQ(player.GetNickname(), "");
+  ASSERT_EQ(true, true);
+}
+#endif // DEPRECATED
+
+TEST(TestGame, Start_Check)
+{
+  Game game;
+
+  game.Start();
+
+  Position carriage = { FIELD_SIZE / 2, FIELD_SIZE / 2 };
+
+  ASSERT_EQ(game.GetCarriage(), carriage);
+  ASSERT_EQ(game.GetActivePlayer(), 0);
+  ASSERT_EQ(game.IsGameOver(), false);
 }
 
-TEST(TestPlayer, ConstructorWithParameter_Check)
+TEST(TestGame, AddPlayer_Check)
 {
-  const std::string name = "SomeName";
+  Game game;
 
-  Player player(name);
+  Player first;
 
-  ASSERT_EQ(player.GetNickname(), name);
+  Player second;
+
+  Player third;
+
+  game.Start();
+
+  ASSERT_EQ(game.AddPlayer(second), true);
+  ASSERT_EQ(game.AddPlayer(first), true);
+  ASSERT_EQ(game.AddPlayer(third), false);
 }
 
-TEST(TestPlayer, SetNickname_Check)
+TEST(TestGame, RemotePlayer_Check)
 {
-  Player player;
+  Game game;
 
-  const std::string name = "SomeName";
+  Player first;
 
-  player.SetNickname(name);
+  Player second;
 
-  ASSERT_EQ(player.GetNickname(), name);
+  game.Start();
+
+  game.AddPlayer(first);
+  game.AddPlayer(second);
+
+  ASSERT_EQ(game.RemovePlayer(1), true);
+  ASSERT_EQ(game.RemovePlayer(1), false);
+  ASSERT_EQ(game.RemovePlayer(0), true);
+  ASSERT_EQ(game.RemovePlayer(0), false);
+}
+
+TEST(TestGame, Player_SetNames)
+{
+  Player first;
+
+  Player second;
+
+  std::string firstName = "MrFirst";
+
+  std::string secondName = "MsSecond";
+
+  first.SetNickname(firstName);
+
+  second.SetNickname(secondName);
+
+  ASSERT_EQ(first.GetNickname(), firstName);
+  ASSERT_EQ(second.GetNickname(), secondName);
 }
